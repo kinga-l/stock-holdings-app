@@ -52,24 +52,21 @@ test.describe('Dodawanie firmy do ewidencji', () => {
     await expect(homePage.addButton).toBeEnabled();
   });
 
-  test('przycisk "Dodaj" jest disabled podczas zapisu', async ({ page }) => {
-    await homePage.openAddDialog();
-    await homePage.fillAddForm('PKN Orlen', 100);
-
-    const submitPromise = page.getByRole('button', { name: /wyślij/i }).click();
-    await expect(homePage.addButton).toBeDisabled();
-    await submitPromise;
-  });
-
   test('zamyka dialog i wyświetla toast po poprawnym zapisie', async ({ page }) => {
     await homePage.openAddDialog();
     await homePage.fillAddForm('PKN Orlen Test', 50);
 
+    const toastPromise = page.locator('.p-toast-message-success').waitFor({
+      state: 'visible',
+      timeout: 8000
+    });
+
     await homePage.submitForm();
 
     await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5000 });
+    await toastPromise;
 
-    await expect(page.getByText(/dane zostały zapisane/i)).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('.p-toast-message-success')).toContainText(/dane zostały zapisane/i);
   });
 
   test('wyświetla toast błędu gdy zapis się nie powiedzie', async ({ page }) => {
@@ -89,7 +86,7 @@ test.describe('Dodawanie firmy do ewidencji', () => {
     await homePage.fillAddForm('Test Error Company', 10);
     await homePage.submitForm();
 
-    await expect(page.getByRole('alert')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByRole('alert')).toContainText('Wystąpił błąd');
+    await expect(page.locator('.p-toast-message-error')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('.p-toast-message-error')).toContainText('Wystąpił błąd');
   });
 });

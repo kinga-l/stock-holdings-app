@@ -66,7 +66,7 @@ export class HomePageComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Sukces',
-            detail: 'Dane zostały zapisane.',
+            detail: 'Dane zostały zapisane',
             life: 3000,
           }),
         error: (error) =>

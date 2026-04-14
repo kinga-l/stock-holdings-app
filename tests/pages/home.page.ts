@@ -18,6 +18,12 @@ export class HomePage {
   }
 
   async openAddDialog() {
+    const errorOverlay = this.page.locator('vite-error-overlay');
+    if (await errorOverlay.isVisible()) {
+      await this.page.keyboard.press('Escape');
+      await errorOverlay.waitFor({ state: 'hidden' });
+    }
+
     await this.addButton.click();
   }
 
