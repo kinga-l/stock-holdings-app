@@ -21,9 +21,14 @@ export class HomePage {
     await this.addButton.click();
   }
 
-  async fillAddForm(name: string, shares: number) {
-    await this.dialog.getByRole('textbox', { name: /nazwa firmy/i }).fill(name);
-    await this.dialog.getByRole('spinbutton', { name: /ilość akcji/i }).fill(String(shares));
+  async fillAddForm(companyName: string, shares: number) {
+    const dialog = this.page.getByRole('dialog');
+
+    await dialog.getByRole('textbox', { name: /nazwa firmy/i }).clear();
+    await dialog.getByRole('textbox', { name: /nazwa firmy/i }).fill(companyName);
+
+    await dialog.getByRole('spinbutton', { name: /ilość akcji/i }).clear();
+    await dialog.getByRole('spinbutton', { name: /ilość akcji/i }).fill(shares.toString());
   }
 
   async submitForm() {

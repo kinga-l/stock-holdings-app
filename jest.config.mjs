@@ -5,8 +5,12 @@ export default {
   ...presets.createCjsPreset(),
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jsdom',
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/tests/',
+  ],
   transformIgnorePatterns: [
-    'node_modules/(?!(@angular|jest-preset-angular|zone.js|@testing-library|primeng|@primeuix|ng2-charts|chart.js|@ctrl))',
+    'node_modules/(?!(@angular|jest-preset-angular|zone.js|@testing-library|primeng|@primeuix|ng2-charts|chart.js|@ctrl))'
   ],
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
