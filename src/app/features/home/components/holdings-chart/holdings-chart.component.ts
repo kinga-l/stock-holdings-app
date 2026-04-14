@@ -1,7 +1,15 @@
-import { Component, input, OnChanges, ChangeDetectionStrategy, computed } from '@angular/core';
-import { ChartData, ChartOptions } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
-import { Holding } from '../../../../core/models/holding.models';
+import {
+  Component,
+  input,
+  OnChanges,
+  ChangeDetectionStrategy,
+  computed,
+  ViewChild,
+  ElementRef,
+  AfterViewInit, OnDestroy
+} from '@angular/core';
+import {ArcElement, Chart, ChartOptions, Legend, PieController, Tooltip} from 'chart.js';
+import {Holding} from '../../../../core/models/holding.models';
 
 export const CHART_COLORS: string[] = [
   '#AF486E',
@@ -36,36 +44,27 @@ export const CHART_COLORS: string[] = [
   '#AA4A7F',
 ];
 
+Chart.register(ArcElement, PieController, Tooltip, Legend);
+
 @Component({
   selector: 'app-holdings-chart',
   standalone: true,
   templateUrl: './holdings-chart.component.html',
   styleUrl: './holdings-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BaseChartDirective],
 })
-export class HoldingsChartComponent implements OnChanges {
+export class HoldingsChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  @ViewChild('pieCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+
   readonly rows = input.required<Holding[]>();
 
-  readonly chartType = 'pie' as const;
-
-  chartData: ChartData<'pie'> = {
-    labels: [],
-    datasets: [
-      {
-        data: [],
-        backgroundColor: CHART_COLORS,
-      },
-    ],
-  };
+  private chart: Chart<'pie'> | null = null;
 
   readonly chartOptions: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: {display: false},
       tooltip: {
         callbacks: {
           label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toLocaleString('pl-PL')} akcji`,
@@ -74,29 +73,52 @@ export class HoldingsChartComponent implements OnChanges {
     },
   };
 
-  private getColor(index: number): string {
-    return CHART_COLORS[index % CHART_COLORS.length];
-  }
-
-  readonly chartLegendItems = computed(() => {
-    const data = this.rows();
-    return data.map((row, index) => ({
+  readonly chartLegendItems = computed(() =>
+    this.rows().map((row, i) => ({
       label: row.companyName,
       value: row.sharesQuantity,
-      color: this.getColor(index),
-    }));
-  });
+      color: CHART_COLORS[i % CHART_COLORS.length],
+    }))
+  );
+
+  ngAfterViewInit(): void {
+    if (this.canvasRef?.nativeElement) {
+      this.createChart();
+    }
+  }
 
   ngOnChanges(): void {
+    if (this.chart) {
+      this.updateChart();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.chart?.destroy();
+  }
+
+  private createChart(): void {
     const data = this.rows();
-    this.chartData = {
-      labels: data.map((r) => r.companyName),
-      datasets: [
-        {
+    this.chart = new Chart(this.canvasRef.nativeElement, {
+      type: 'pie',
+      data: {
+        labels: data.map((r) => r.companyName),
+        datasets: [{
           data: data.map((r) => r.sharesQuantity),
           backgroundColor: data.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
-        },
-      ],
-    };
+        }],
+      },
+      options: this.chartOptions,
+    });
+  }
+
+  private updateChart(): void {
+    const data = this.rows();
+    this.chart!.data.labels = data.map((r) => r.companyName);
+    this.chart!.data.datasets[0].data = data.map((r) => r.sharesQuantity);
+    this.chart!.data.datasets[0].backgroundColor = data.map((_, i) =>
+      CHART_COLORS[i % CHART_COLORS.length]
+    );
+    this.chart!.update();
   }
 }

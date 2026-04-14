@@ -10,7 +10,7 @@ export default {
     '/tests/',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(@angular|jest-preset-angular|zone.js|@testing-library|primeng|@primeuix|ng2-charts|chart.js|@ctrl))'
+    'node_modules/(?!(@angular|jest-preset-angular|zone.js|@testing-library|primeng|@primeuix|chart.js|@ctrl))'
   ],
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',

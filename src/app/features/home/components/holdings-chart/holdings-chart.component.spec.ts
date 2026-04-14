@@ -1,3 +1,18 @@
+jest.mock('chart.js', () => ({
+  Chart: Object.assign(
+    jest.fn().mockImplementation(() => ({
+      update: jest.fn(),
+      destroy: jest.fn(),
+      data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
+    })),
+    { register: jest.fn() }
+  ),
+  ArcElement: jest.fn(),
+  PieController: jest.fn(),
+  Tooltip: jest.fn(),
+  Legend: jest.fn(),
+}));
+
 import { render } from '@testing-library/angular';
 import { HoldingsChartComponent } from './holdings-chart.component';
 import { Holding } from '../../../../core/models/holding.models';
@@ -33,7 +48,7 @@ describe('HoldingsChartComponent', () => {
     });
     fixture.detectChanges();
     const comp = fixture.componentInstance;
-    expect(comp.chartData.datasets[0].data).toEqual([100, 200]);
-    expect(comp.chartData.labels).toEqual(['Orlen', 'PKN']);
+    expect(comp.chartLegendItems().map(i => i.value)).toEqual([100, 200]);
+    expect(comp.chartLegendItems().map(i => i.label)).toEqual(['Orlen', 'PKN']);
   });
 });

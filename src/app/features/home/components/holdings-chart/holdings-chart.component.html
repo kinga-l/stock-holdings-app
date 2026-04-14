@@ -1,16 +1,10 @@
 @if (rows().length > 0) {
   <div class="chart-wrapper">
     <canvas
-      baseChart
-      [type]="chartType"
-      [data]="chartData"
-      [options]="chartOptions"
+      #pieCanvas
       role="img"
-      [attr.aria-label]="
-        'Wykres kołowy ilości akcji ' + rows().length + ' firm. Szczegóły w tabeli.'
-      "
-    >
-    </canvas>
+      [attr.aria-label]="'Wykres kołowy ilości akcji ' + rows().length + ' firm. Szczegóły w tabeli.'"
+    ></canvas>
   </div>
   <ul class="chart-legend">
     @for (item of chartLegendItems(); track item.label) {

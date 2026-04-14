@@ -6,7 +6,7 @@ Aplikacja do ewidencji akcji i ich wartości z aktualizacją cen w czasie rzeczy
 
 - **Angular 20** - standalone components, Signals
 - **PrimeNG 20** - komponenty UI
-- **Chart.js + ng2-charts** - wykres kołowy
+- **Chart.js** - wykres kołowy
 - **RxJS webSocketSubject** - aktualizacje cen w czasie rzeczywistym
 - **Jest + Angular Testing Library** - testy jednostkowe
 - **Playwright** - testy E2E
