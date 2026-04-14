@@ -35,9 +35,9 @@
     "@angular/platform-browser-dynamic": "^20.3.18",
     "@angular/router": "^20.3.18",
     "@primeuix/themes": "^2.0.3",
-    "chart.js": "^4.5.1",
     "primeicons": "^7.0.0",
     "primeng": "^20.4.0",
+    "chart.js": "^4.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
