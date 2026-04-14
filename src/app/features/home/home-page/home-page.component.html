@@ -1,0 +1,67 @@
+<main class="page" role="main">
+  <header class="page__header">
+    <div class="page__title-group">
+      <h1 class="page__title">Ewidencja akcji firm i ich wartości</h1>
+      <p class="page__subtitle">
+        Dane aktualizowane w czasie rzeczywistym dla {{ companiesCount() }} firm
+      </p>
+    </div>
+
+    <p-button
+      label="Dodaj"
+      icon="pi pi-plus"
+      (onClick)="openAddDialog()"
+      [disabled]="isSavingSignal()"
+      ariaLabel="Dodaj firmę do ewidencja akcji"
+    >
+    </p-button>
+  </header>
+
+  @if (isSavingSignal()) {
+    <p-progressbar
+      mode="indeterminate"
+      [style]="{ height: '3px' }"
+      aria-label="Zapisywanie danych"
+    />
+  }
+
+  <section class="page__grid" aria-label="Ewidencja akcji">
+    <p-card class="page__panel">
+      <h2 class="panel__heading">Tabela ewidencja akcji</h2>
+      @if (isLoadingSignal()) {
+        <div class="skeleton-table" aria-busy="true" aria-label="Ładowanie danych">
+          <div class="skeleton-table__header"></div>
+          @for (row of skeletonRows; track $index) {
+            <div class="skeleton-table__row">
+              <div class="skeleton-table__cell skeleton-table__cell--wide"></div>
+              <div class="skeleton-table__cell"></div>
+              <div class="skeleton-table__cell"></div>
+              <div class="skeleton-table__cell"></div>
+            </div>
+          }
+        </div>
+      } @else {
+        <app-holdings-table [rows]="holdingsSignal()" />
+      }
+    </p-card>
+
+    <p-card class="page__panel">
+      <h2 class="panel__heading">Ilość akcji dla poszczególnych firm</h2>
+      @if (isLoadingSignal()) {
+        <div class="chart-skeleton" aria-busy="true" aria-label="Ładowanie wykresu">
+          <div class="chart-skeleton__circle"></div>
+          <div class="chart-skeleton__legend">
+            @for (item of skeletonRows; track $index) {
+              <div class="chart-skeleton__legend-item">
+                <div class="chart-skeleton__dot"></div>
+                <div class="chart-skeleton__label"></div>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <app-holdings-chart [rows]="holdingsSignal()"></app-holdings-chart>
+      }
+    </p-card>
+  </section>
+</main>

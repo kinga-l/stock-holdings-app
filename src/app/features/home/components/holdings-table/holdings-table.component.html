@@ -1,0 +1,33 @@
+<p-table
+  [value]="rows()"
+  [tableStyle]="{ 'min-width': '40rem' }"
+  class="p-datatable-gridlines p-datatable-sm"
+  [rowHover]="true"
+  aria-label="Tabela ewidencyjna akcji firm - nazwa firmy, ilość akcji, wartości brutto i netto"
+>
+  <ng-template #header>
+    <tr>
+      <th scope="col">Nazwa firmy</th>
+      <th scope="col" class="num-col">Ilość akcji</th>
+      <th scope="col" class="num-col">Wartość brutto</th>
+      <th scope="col" class="num-col">Wartość netto</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-row>
+    <tr>
+      <td>{{ row.companyName }}</td>
+      <td class="num-col">{{ row.sharesQuantity | number }}</td>
+      <td class="num-col">{{ row.grossPrice | currency: 'PLN' : 'symbol' : '1.2-2' : 'pl' }}</td>
+      <td class="num-col">{{ row.netPrice | currency: 'PLN' : 'symbol' : '1.2-2' : 'pl' }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="4" class="empty-state">
+        <span aria-live="polite">Brak danych do wyświetlenia.</span>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

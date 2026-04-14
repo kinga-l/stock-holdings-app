@@ -1,0 +1,46 @@
+@if (rows().length > 0) {
+  <div class="chart-wrapper">
+    <canvas
+      baseChart
+      [type]="chartType"
+      [data]="chartData"
+      [options]="chartOptions"
+      role="img"
+      [attr.aria-label]="
+        'Wykres kołowy ilości akcji ' + rows().length + ' firm. Szczegóły w tabeli.'
+      "
+    >
+    </canvas>
+  </div>
+  <ul class="chart-legend">
+    @for (item of chartLegendItems(); track item.label) {
+      <li>
+        <span class="legend-color" [style.background]="item.color"></span>
+        {{ item.label }}: {{ item.value }}
+      </li>
+    }
+  </ul>
+
+  <!-- Tabela dla czytników  -->
+  <table class="sr-only" aria-label="Dane wykresu - ilość akcji dla poszczególnych firm">
+    <caption class="sr-only">
+      Ilość akcji w podziale na firmy
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Firma</th>
+        <th scope="col">Ilość akcji</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.id) {
+        <tr>
+          <td>{{ row.companyName }}</td>
+          <td>{{ row.sharesQuantity }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <p class="chart-empty" aria-live="polite">Brak danych do wyświetlenia wykresu.</p>
+}

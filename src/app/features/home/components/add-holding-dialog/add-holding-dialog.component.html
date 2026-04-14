@@ -1,0 +1,75 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  novalidate
+  aria-label="Formularz dodawania firmy do ewidencji"
+>
+  <div class="field">
+    <p-floatLabel>
+      <input
+        pInputText
+        id="companyName"
+        formControlName="companyName"
+        aria-describedby="companyName_error"
+        [attr.aria-invalid]="companyNameCtrl.invalid && companyNameCtrl.touched"
+        autocomplete="organization"
+      />
+      <label for="companyName">Nazwa firmy *</label>
+    </p-floatLabel>
+
+    @if (companyNameCtrl.touched) {
+      @if (companyNameCtrl.hasError('required')) {
+        <small id="companyName_error" role="alert" class="field-error">
+          Nazwa firmy jest wymagana.
+        </small>
+      } @else if (companyNameCtrl.hasError('minlength')) {
+        <small id="companyName_error_length" role="alert" class="field-error">
+          Nazwa musi mieć co najmniej 2 znaki.
+        </small>
+      }
+    }
+  </div>
+
+  <div class="field">
+    <p-floatLabel>
+      <p-inputNumber
+        inputId="sharesQuantity"
+        formControlName="sharesQuantity"
+        [min]="1"
+        [useGrouping]="false"
+        aria-describedby="sharesQuantity_error"
+        [attr.aria-invalid]="sharesQuantityCtrl.invalid && sharesQuantityCtrl.touched"
+      >
+      </p-inputNumber>
+      <label for="sharesQuantity">Ilość akcji *</label>
+    </p-floatLabel>
+
+    @if (sharesQuantityCtrl.touched) {
+      @if (sharesQuantityCtrl.hasError('required')) {
+        <small id="sharesQuantity_error" role="alert" class="field-error">
+          Ilość akcji jest wymagana.
+        </small>
+      } @else if (sharesQuantityCtrl.hasError('min')) {
+        <small id="sharesQuantity_error_min" role="alert" class="field-error">
+          Ilość akcji musi być większa od 0.
+        </small>
+      }
+    }
+  </div>
+
+  <div class="dialog-actions">
+    <p-button
+      type="button"
+      label="Anuluj"
+      severity="secondary"
+      (click)="cancel()"
+      aria-label="Anuluj dodawanie firmy"
+    ></p-button>
+    <p-button
+      type="submit"
+      label="Wyślij"
+      [loading]="false"
+      aria-label="Wyślij i zapisz dane firmy"
+    ></p-button>
+  </div>
+</form>

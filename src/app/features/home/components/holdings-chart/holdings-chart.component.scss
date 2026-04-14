@@ -1,0 +1,47 @@
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+
+  @media (min-width: 600px) {
+    height: 300px;
+  }
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 10px 0;
+  list-style: none;
+  font-size: 11px;
+
+  @media (min-width: 600px) {
+    gap: 6px 16px;
+    padding: 12px 0;
+    font-size: 12px;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+.chart-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--p-text-muted-color);
+}
